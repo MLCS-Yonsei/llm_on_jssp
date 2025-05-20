@@ -1,5 +1,6 @@
 #############################################################################
 # Pre-training gpt2 with 120k full dataset of Starjob                       #
+# show answers to the same test prompts before training, and after training #
 #############################################################################
 import os
 import json
