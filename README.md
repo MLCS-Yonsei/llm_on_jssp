@@ -6,6 +6,11 @@ Starjob : download the full dataset from the google drive linked in README (http
 (can't find available lfs)
 
 
+
+
+
 conda create -n jsspllm python=3.8
+
 activate jsspllm
+
 pip install ortools
