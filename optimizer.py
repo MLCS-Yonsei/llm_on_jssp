@@ -70,7 +70,7 @@ if __name__ == '__main__':
             [(1, 5), (5, 4), (0, 2)],
             [(1, 1), (2, 4), (3, 2)],
         ],
-        "label": 1  # 0: fastest, 1: best makespan
+        "label": 1  # 0: fastest, 1: best makespan        ### 용화씨 여기 label 바꿔보면 솔루션 다르게 나옵니다. (솔루션 평가기준은 2개. 연산시간 fastest랑 shortest makespan)
     }
 
     solution = solve_schedule(problem_json)
