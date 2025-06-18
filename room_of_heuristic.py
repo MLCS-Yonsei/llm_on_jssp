@@ -1,113 +1,103 @@
 ##### 휴리스틱 기법들을 모아둔 방 #####
+### job별 operation 개수 비정형 가능 ###
+## 기계 중복 허용 안함 추가 ##
 
 import random
 import time
 from ortools.sat.python import cp_model
 
-# 1. Tabu Search (의사코드 기반)
-def solver_tabu(problem):
-    time.sleep(random.uniform(0.1, 0.4))
-    jobs = len(problem)
-    machines = len(problem[0])
-    # 무작위 순서로 simple schedule 생성
-    start = 0
+def _build_feasible_schedule(problem, job_order=None, machine_priority=None, randomize=False):
+    """
+    공통적으로 쓸 수 있는 충돌 없는 스케줄 생성기.
+    job_order: 작업 순서 지정용 (None이면 원래 순서)
+    machine_priority: 각 job 내 machine 순서 바꿀 때 사용
+    randomize: 랜덤 offset 주기 등, 다양성 부여용
+    """
+    n_jobs = len(problem)
     schedule = []
-    for i in range(jobs):
+    machine_available = {}        # {machine: 사용가능시간}
+    job_last_end = [0] * n_jobs   # 각 job에서 이전 작업 종료 시점
+    jobs = problem if job_order is None else [problem[i] for i in job_order]
+
+    for jid, job in enumerate(jobs):
+        j_idx = jid if job_order is None else job_order[jid]
         job_sched = []
-        t = start
-        for j in range(machines):
-            duration = problem[i][j][1]
-            job_sched.append((problem[i][j][0], t, t+duration))
-            t += duration
+        operations = job
+        if machine_priority is not None:
+            operations = [job[i] for i in machine_priority[j_idx]]
+        for tid, (machine, duration) in enumerate(operations):
+            start_time = max(machine_available.get(machine, 0), job_last_end[j_idx])
+            # 랜덤하게 delay나 bias를 추가하고 싶다면
+            if randomize:
+                start_time += random.randint(0, 1)
+            end_time = start_time + duration
+            job_sched.append((machine, start_time, end_time))
+            machine_available[machine] = end_time
+            job_last_end[j_idx] = end_time
         schedule.append(job_sched)
-    makespan = max(j[-1] for job in schedule for j in job)
+    makespan = max(op[2] for job in schedule for op in job)
+    return schedule, makespan
+
+# --------- 휴리스틱 함수들 ----------
+
+def solver_tabu(problem):
+    # 실제 Tabu Search 구현은 복잡하니, 여기선 feasible한 스케줄만 만듭니다
+    time.sleep(random.uniform(0.1, 0.4))
+    schedule, makespan = _build_feasible_schedule(problem)
     return ("tabu", {"schedule": schedule, "makespan": makespan})
 
-# 2. Genetic Algorithm (의사코드 기반)
 def solver_ga(problem):
+    # 임의의 job 순서와 약간의 랜덤성을 주어 feasible 스케줄 생성
     time.sleep(random.uniform(0.2, 0.5))
-    jobs = len(problem)
-    machines = len(problem[0])
-    # 랜덤 크로스오버 시뮬
-    start = 0
-    schedule = []
-    for i in range(jobs):
-        job_sched = []
-        t = start + random.randint(0, 2)
-        for j in range(machines):
-            duration = problem[i][j][1]
-            job_sched.append((problem[i][j][0], t, t+duration))
-            t += duration
-        schedule.append(job_sched)
-    makespan = max(j[-1] for job in schedule for j in job)
+    n = len(problem)
+    job_order = list(range(n))
+    random.shuffle(job_order)
+    schedule, makespan = _build_feasible_schedule(problem, job_order=job_order, randomize=True)
     return ("ga", {"schedule": schedule, "makespan": makespan})
 
-# 3. Simulated Annealing (의사코드 기반)
 def solver_sa(problem):
+    # Simulated Annealing처럼 약간의 랜덤 offset을 주고 feasible 스케줄
     time.sleep(random.uniform(0.15, 0.45))
-    jobs = len(problem)
-    machines = len(problem[0])
-    start = random.randint(0, 1)
-    schedule = []
-    for i in range(jobs):
-        job_sched = []
-        t = start
-        for j in range(machines):
-            duration = problem[i][j][1]
-            job_sched.append((problem[i][j][0], t, t+duration))
-            t += duration + random.randint(0, 1)
-        schedule.append(job_sched)
-    makespan = max(j[-1] for job in schedule for j in job)
+    schedule, makespan = _build_feasible_schedule(problem, randomize=True)
     return ("sa", {"schedule": schedule, "makespan": makespan})
 
-# 4. Ant Colony Optimization (의사코드 기반)
 def solver_aco(problem):
+    # pheromone_bias를 시뮬레이션. random bias로 start_time에 영향
     time.sleep(random.uniform(0.15, 0.5))
-    jobs = len(problem)
-    machines = len(problem[0])
+    pheromone_bias = random.randint(0, 1)
+    def custom_randomize():
+        return random.randint(0, pheromone_bias)
+    # 아래 코드처럼, bias를 start_time에 더해주는 느낌으로 구현
+    n_jobs = len(problem)
     schedule = []
-    pheromone_bias = random.uniform(0, 1)
-    for i in range(jobs):
+    machine_available = {}
+    job_last_end = [0] * n_jobs
+    for job_id, job in enumerate(problem):
         job_sched = []
-        t = 0
-        for j in range(machines):
-            duration = problem[i][j][1]
-            job_sched.append((problem[i][j][0], t, t+duration+int(pheromone_bias)))
-            t += duration + int(pheromone_bias)
+        for machine, duration in job:
+            start_time = max(machine_available.get(machine, 0), job_last_end[job_id])
+            start_time += random.randint(0, pheromone_bias)
+            end_time = start_time + duration
+            job_sched.append((machine, start_time, end_time))
+            machine_available[machine] = end_time
+            job_last_end[job_id] = end_time
         schedule.append(job_sched)
-    makespan = max(j[-1] for job in schedule for j in job)
+    makespan = max(op[2] for job in schedule for op in job)
     return ("aco", {"schedule": schedule, "makespan": makespan})
 
-# 5. GRASP (의사코드 기반)
 def solver_grasp(problem):
+    # 랜덤 요소 + 탐욕적으로 기계/작업 가용시점에 배치
     time.sleep(random.uniform(0.1, 0.35))
-    jobs = len(problem)
-    machines = len(problem[0])
-    schedule = []
-    for i in range(jobs):
-        job_sched = []
-        t = random.randint(0, 2)
-        for j in range(machines):
-            duration = problem[i][j][1]
-            job_sched.append((problem[i][j][0], t, t+duration))
-            t += duration
-        schedule.append(job_sched)
-    makespan = max(j[-1] for job in schedule for j in job)
+    schedule, makespan = _build_feasible_schedule(problem, randomize=True)
     return ("grasp", {"schedule": schedule, "makespan": makespan})
 
-# 6. OR-Tools (실제 작동 예시)
 def solver_ortools(problem):
-    """
-    OR-Tools로 JSSP를 푸는 함수. machine 번호가 연속/불연속/큰 값이어도 에러 없이 동작.
-    입력: problem = [[(machine_id, duration), ...], ...]
-    출력: ("ortools", {"schedule": [...], "makespan": ...})
-    """
-    jobs_data = problem  # [[(machine_id, duration), ...], ...]
+    jobs_data = problem
     model = cp_model.CpModel()
     num_jobs = len(jobs_data)
     horizon = sum(task[1] for job in jobs_data for task in job)
     all_tasks = {}
-    machine_to_intervals = dict()   # dict로 선언!
+    machine_to_intervals = dict()
 
     for job_id, job in enumerate(jobs_data):
         previous_end = None
@@ -117,7 +107,6 @@ def solver_ortools(problem):
             end_var = model.NewIntVar(0, horizon, 'end' + suffix)
             interval = model.NewIntervalVar(start_var, duration, end_var, 'interval' + suffix)
             all_tasks[(job_id, task_id)] = (start_var, end_var, interval)
-            # dict에 머신별로 interval 모으기
             if machine not in machine_to_intervals:
                 machine_to_intervals[machine] = []
             machine_to_intervals[machine].append(interval)
@@ -125,7 +114,6 @@ def solver_ortools(problem):
                 model.Add(start_var >= previous_end)
             previous_end = end_var
 
-    # 모든 머신별 NoOverlap 제약 추가
     for intervals in machine_to_intervals.values():
         model.AddNoOverlap(intervals)
 
@@ -137,9 +125,9 @@ def solver_ortools(problem):
     status = solver.Solve(model)
     schedule = []
     if status in [cp_model.OPTIMAL, cp_model.FEASIBLE]:
-        for job_id in range(num_jobs):
+        for job_id, job in enumerate(jobs_data):
             job_sched = []
-            for task_id in range(len(jobs_data[job_id])):
+            for task_id in range(len(job)):
                 start = int(solver.Value(all_tasks[(job_id, task_id)][0]))
                 end = int(solver.Value(all_tasks[(job_id, task_id)][1]))
                 machine = jobs_data[job_id][task_id][0]
