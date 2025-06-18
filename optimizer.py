@@ -23,7 +23,7 @@ def solve_schedule(problem_json):
         solver_ortools,
     ]
 
-    if label == 0:
+    if label == 'fastest':
         # Return the solution from the fastest solver
         with ProcessPoolExecutor(max_workers=6) as executor:
             futures = {executor.submit(solver, problem): solver.__name__ for solver in solvers}
@@ -38,7 +38,7 @@ def solve_schedule(problem_json):
             "solution": solution
         }
 
-    elif label == 1:
+    elif label == 'best_makespan':
         # Return the solution with the best makespan
         results = []
         with ProcessPoolExecutor(max_workers=6) as executor:
@@ -46,7 +46,7 @@ def solve_schedule(problem_json):
             for future in futures:
                 solver_name, solution = future.result()
                 results.append((solver_name, solution))
-
+        print(results) ### 모든 답 출력력
         # Select the solution with the shortest makespan
         best_solver, best_solution = min(results, key=lambda x: x[1]["makespan"])
         return {
@@ -62,6 +62,7 @@ def solve_schedule(problem_json):
 '''솔버 부서 잘 돌아가는지 확인'''
 if __name__ == '__main__':
     # Example problem JSON
+    '''
     problem_json = {
         # 4 jobs, 6 machines (each row for job, (machine_index, duration))
         "matrix": [
@@ -70,8 +71,18 @@ if __name__ == '__main__':
             [(1, 5), (5, 4), (0, 2)],
             [(1, 1), (2, 4), (3, 2)],
         ],
-        "label": 1  # 0: fastest, 1: best makespan        ### 용화씨 여기 label 바꿔보면 솔루션 다르게 나옵니다. (솔루션 평가기준은 2개. 연산시간 fastest랑 shortest makespan)
+        "label": 'best makespan'  # 0: fastest, 1: best makespan
     }
+    '''
+    #problem_json = {'matrix': [[[2, 2], [901, 26], [0, 3], [902, 31], [3, 4]], [[1, 4], [911, 25], [2, 2]]], 
+    #                'label': 'best_makespan'}
+    problem_json = {'matrix': 
+                    [[[900, 21], [2, 10], [901, 20], [0, 5], [902, 25], [3, 20], [903, 16], [5, 2], [904, 22], [1, 12]], 
+                    [[910, 34], [1, 15], [911, 25], [2, 7], [912, 23], [6, 20]], 
+                    [[920, 19], [6, 10], [921, 23], [2, 15], [922, 21], [5, 20]], 
+                    [[930, 11], [0, 20], [931, 33], [4, 5], [932, 10], [1, 2], [933, 18], [3, 10]]], 
+                    'label': 
+                    'best_makespan'}
 
     solution = solve_schedule(problem_json)
     print("\n\n[Solution]\n")
