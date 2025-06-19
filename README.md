@@ -202,4 +202,9 @@ Job Matrix:
   [[6,10],[2,15],[5,20]],
   [[0,20],[4,5],[1,2],[3,10]]
 ]
+```
+
+<p align="center">
+  <img src="sim/renders/mlp_test.svg" alt="Lifelong MAPF Example" width="300"/>
+</p>
 
