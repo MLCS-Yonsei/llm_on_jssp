@@ -1,17 +1,14 @@
 # ────────────────────────────────────────────────────────────────
-# 1) 경고 메시지 억제
+# Avoiding Errors 
 from transformers import logging
 logging.set_verbosity_error()
 
-# 2) transformers 내부 병렬화 검사 우회
 import transformers.modeling_utils as _mutils
 _mutils.ALL_PARALLEL_STYLES = []
 
-# 3) 모든 PreTrainedModel.post_init 을 빈 함수로 덮어쓰기
 from transformers.modeling_utils import PreTrainedModel
 PreTrainedModel.post_init = lambda self: None
 
-# 4) T5LayerNorm Apex 오류 회피용 패치
 import importlib
 import torch
 try:
@@ -34,18 +31,17 @@ from transformers import (
     pipeline,
 )
 
+path = #"File path of 'llm_on_jssp'/" 
+
 def load_llm_model(local_path):
-    """LoRA 어댑터 모델과 일반 LLM을 모두 안전하게 로드합니다."""
-    # 단일 GPU 또는 CPU만 사용하도록 설정
     device_map = {"": 0} if torch.cuda.is_available() else None
 
-    # adapter_config.json 이 있으면 PEFT 방식
     if os.path.exists(os.path.join(local_path, "adapter_config.json")):
         from peft import PeftModel, PeftConfig
         adapter_dir = local_path
         config = PeftConfig.from_pretrained(adapter_dir)
 
-        # 1) base model을 single-device 로드
+        # 1) load base model as single-device
         base_model = AutoModelForCausalLM.from_pretrained(
             config.base_model_name_or_path,
             device_map=None,
@@ -53,7 +49,7 @@ def load_llm_model(local_path):
         )
         base_model.config.model_parallel = False
 
-        # 2) PEFT 어댑터 적용 (device_map 지정 가능)
+        # 2) apply PEFT adapter
         model = PeftModel.from_pretrained(
             base_model,
             adapter_dir,
@@ -65,7 +61,7 @@ def load_llm_model(local_path):
             trust_remote_code=True,
         )
     else:
-        # 일반 base model 로드
+        # load original base model
         tokenizer = AutoTokenizer.from_pretrained(local_path, trust_remote_code=True)
         model = AutoModelForCausalLM.from_pretrained(
             local_path,
@@ -74,7 +70,7 @@ def load_llm_model(local_path):
         )
         model.config.model_parallel = False
 
-    # pipeline 생성 (device 인자는 제거)
+    # generate pipeline 
     pipe = pipeline(
         "text-generation",
         model=model,
@@ -85,11 +81,9 @@ def load_llm_model(local_path):
     return pipe
 
 def load_seq2seq_model(model_name):
-    """Seq2Seq 모델을 빠르게 로드하고 단일 디바이스로 이동합니다."""
     tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
     model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
 
-    # GPU가 있으면 GPU로, 없으면 CPU로
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model.to(device)
 
@@ -102,7 +96,7 @@ def load_seq2seq_model(model_name):
     )
     return pipe
 
-# ====== 평가 기준 함수들 ======
+# ====== Performance Scores ======
 def exact_match(pred, gt):
     return pred == gt
 
@@ -128,11 +122,11 @@ def parse_json_output(output):
         return None
     return None
 
-# ====== 벤치마크 실행 함수 ======
+
 def benchmark(models, test_samples):
     result_rows = []
     for mname, model_fn in models.items():
-        print(f"\n🔍 Evaluating model: {mname}")
+        print(f"\n Evaluating model: {mname}")
         EM = MatrixOnly = LabelOnly = Fail = 0
         Times = []
 
@@ -174,19 +168,19 @@ def benchmark(models, test_samples):
     print(df.to_string(index=False))
     return df
 
-# ====== 메인 실행 ======
+
 if __name__ == "__main__":
     finetuned_llm = load_llm_model(
-        "./medical/jssp_llm/llm1_jssp_mistral7b_lora_final"
+        path + "llm1_jssp_mistral7b_lora_final"
     )
     mistral_original = load_llm_model("mistralai/Mistral-7B-Instruct-v0.2")
     seq2seq = load_seq2seq_model("t5-base")
 
-    # 테스트 샘플을 5개로 제한하여 빠른 실행
+    
     with open(
-        "./medical/jssp_llm/train_llm/test_data_llm1_100.jsonl"
+        path + "train_llm/test_data_llm1_100.jsonl"
     ) as f:
-        test_samples = [json.loads(line) for line in f][:50]
+        test_samples = [json.loads(line) for line in f][:50]    # evaluate only 50 samples
 
     benchmark(
         {
