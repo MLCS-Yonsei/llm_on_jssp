@@ -23,19 +23,9 @@ The **Job Shop Scheduling Problem (JSSP)** is a classic optimization task where:
 Additionally, this project incorporates **agent movement time** and **collision avoidance** to reflect real-world robotic shop floors.
 
 <p align="center">
-<img src="https://github.com/user-attachments/assets/046698a2-f8a6-48a8-86f6-c702c993ee72" width="500" height="300"/>
+<img src="https://github.com/user-attachments/assets/046698a2-f8a6-48a8-86f6-c702c993ee72" width="500" height="350"/>
 </p>
 
-| Symbol         | Meaning                                       |
-|----------------|-----------------------------------------------|
-| 𝐽𝑖             | *i*‑th job (total *m* jobs)                    |
-| 𝑂𝑖,𝑗           | *j*‑th operation of job 𝐽𝑖                      |
-| 𝑀𝑘             | *k*‑th machine                                 |
-| 𝐴𝑠             | *s*‑th agent or worker                         |
-| 𝐶𝑖             | Completion time of job 𝐽𝑖                      |
-| 𝐶ₘₐₓ          | Makespan = max(𝐶𝑖)                             |
-| 𝑇𝑠,𝑥,𝑦        | Time for agent *s* to move from 𝑀ₓ to 𝑀ᵧ        |
-| 𝐷ₜ             | Time delay due to the *t*‑th collision         |
 
 ---
 
@@ -50,17 +40,7 @@ To achieve this, two Large Language Models (LLMs) are utilized:
 ---
 ### 1. LLM1 (From Language to Matrix)
 
-- **Purpose**: Converts natural language prompts into structured job matrices
-- **Input**: Natural language job description (prompt)
-- **Output**: JSON object containing:
-  - Matrix format of the job schedule
-  - Label information (e.g., best solver criteria)
-- **Dataset**:
-  - 5000 synthetic samples
-  - Randomly generated combinations of:
-    - Number of jobs and operations
-    - Machine assignments
-    - Processing durations
+LLM1 is designed to convert natural language prompts into structured job matrices. Its input is a natural language job description (prompt), and the output is a JSON object containing both the matrix representation of the job schedule and associated label information (such as the best solver criterion). The model was trained on a dataset of 5000 synthetically generated samples, which include randomly varied numbers of jobs and operations, different machine assignments, and diverse processing durations.
 
 ---
 ### 2. Integrated Optimizer
