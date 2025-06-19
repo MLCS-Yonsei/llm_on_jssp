@@ -22,6 +22,9 @@ The **Job Shop Scheduling Problem (JSSP)** is a classic optimization task where:
 
 Additionally, this project incorporates **agent movement time** and **collision avoidance** to reflect real-world robotic shop floors.
 
+<p align="center">
+<img src="https://github.com/user-attachments/assets/046698a2-f8a6-48a8-86f6-c702c993ee72.jpg" width="400" height="200"/>
+</p>
 
 | Symbol         | Meaning                                       |
 |----------------|-----------------------------------------------|
