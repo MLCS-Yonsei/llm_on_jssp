@@ -133,7 +133,7 @@ LLM2 is responsible for transforming the optimized job schedule, which is repres
 #### Baseline Policy : Lifelong Multi-Agent Pathfinding Policy
 This project provides a simulation framework for analyzing the interplay between job scheduling and multi-agent pathfinding, highlighting the challenges of schedule fidelity in dynamic, congested environments.
 
-#### (i) License
+#### i. License
 This project is licensed under the MIT License. Some portions of the code are adapted from [AIRI-Institute/learn-to-follow](https://github.com/AIRI-Institute/learn-to-follow) under the same license. See the [LICENSE](.learn_follow/LICENSE) file for details.
 
 <p align="center">
@@ -141,13 +141,13 @@ This project is licensed under the MIT License. Some portions of the code are ad
 </p>
 
 
-#### (ii) Policy Description
+#### ii. Policy Description
 
 The core policy implemented in this project is based on the **Follower** algorithm proposed in  
 ["Learn to Follow: Decentralized Lifelong Multi-agent Pathfinding via Planning and Learning"](https://arxiv.org/pdf/2310.01207).
 
 
-#### (iii) Illustration
+#### iii. Illustration
 The figure above visualizes a typical lifelong multi-agent scenario.  
 - Each circle represents an agent's goal.  
 - The red area shows the local observation used by the RL policy.  
@@ -156,7 +156,7 @@ The figure above visualizes a typical lifelong multi-agent scenario.
 For more details, see the original [paper](https://arxiv.org/pdf/2310.01207).
 
 
-#### (iv) Key features
+#### iv. Key features
 - **Decentralized planning:**  
   Each agent plans its path independently using a global planner, then continually replans based on observed conflicts.
 - **Lifelong pathfinding:**  
@@ -167,7 +167,7 @@ For more details, see the original [paper](https://arxiv.org/pdf/2310.01207).
   The combined global planning and local RL allow the system to handle large numbers of agents and complex, cluttered maps.
 
 
-#### (v) Detailed Modifications and Scope
+#### v. Detailed Modifications and Scope
 - **Job Scheduling with Wait Times:** <br/>
 In this simulation, each agent is given a fixed sequence of targets (jobs) to visit. Upon arriving at each target, the agent waits for a specified processing (wait) time, simulating job execution as in job-shop scheduling (JSSP). This setup allows for realistic modeling of both movement and task processing phases.
 
@@ -204,43 +204,41 @@ main.py
 sim/test.py
 ```
 
-### Map, Goal Sequences, and Wait Sequences
 
-#### 4. Where to contain input data
+#### 4. Where to store input data
 Job description prompts and map image is stored at `input/problem_prompt.json` and `input/env_img.png`.
-The map configuration file for the simulator is stored at `env/test-mapz.yaml` and you can specify the map file by editing the parser argument in your code:
+For the simulator, the map configuration file is stored at `env/test-mapz.yaml` or you can specify the map file by editing the parser argument in your code:
 
 ```python
 parser.add_argument('--map_name', type=str, default='mlp_test', help='Map name (default: %(default)s)')
 ```
 
-#### Goal Sequences & Wait Sequences
+#### 5. Setting goal sequences & wait sequences in simulator
 
-- Edit these variables in test.py, specifically in the create_custom_env function:
+Edit the goal sequences and wait sequences in our simulator specifically in the `create_custom_env()` function from `sim/test.py`. <br/>
+- **goal_sequences**   : The list of goals (targets) each agent will visit in order. <br/>
+- **wait_sequences**   : The wait time at each corresponding goal for each agent. <br/>
+- **agents_start_pos** : The starting positions for each agent. <br/>
 
 ```python
-    goal_sequences = [
-        [(0, 13), (0, 7), (0, 18), (10, 12), (0, 24)],
-        [(0, 24), (0, 13), (10, 0)],
-        [(10, 0), (0, 18), (10, 12)],
-        [(0, 7), (10, 24), (0, 24), (0, 18)],
-    ]
+goal_sequences = [
+    [(0, 13), (0, 7), (0, 18), (10, 12), (0, 24)],
+    [(0, 24), (0, 13), (10, 0)],
+    [(10, 0), (0, 18), (10, 12)],
+    [(0, 7), (10, 24), (0, 24), (0, 18)],
+]
 
-    wait_sequences = [
-        [10, 5, 20, 2, 12],
-        [15, 7, 20],
-        [10, 15, 20],
-        [20, 5, 2, 10],
-    ]
+wait_sequences = [
+    [10, 5, 20, 2, 12],
+    [15, 7, 20],
+    [10, 15, 20],
+    [20, 5, 2, 10],
+]
 
-    agents_start_pos = [(7, 0), (7, 1), (7, 2), (7, 3)]
+agents_start_pos = [(7, 0), (7, 1), (7, 2), (7, 3)]
 ```
 
-- goal_sequences: The list of goals (targets) each agent will visit in order.
 
-- wait_sequences: The wait time at each corresponding goal for each agent.
-
-- agents_start_pos: The starting positions for each agent.
   
 <br/>
 
