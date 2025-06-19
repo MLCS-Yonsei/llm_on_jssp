@@ -82,7 +82,7 @@ Some portions of the code are adapted from [AIRI-Institute/learn-to-follow](http
 See the [LICENSE](.learn_follow/LICENSE) file for details.
 
 <p align="center">
-  <img src="./docker/image.png" alt="Lifelong MAPF Example" width="300"/>
+  <img src="sim/docker/image.png" alt="Lifelong MAPF Example" width="300"/>
 </p>
 
 ## Policy Description
