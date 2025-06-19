@@ -36,6 +36,9 @@ Additionally, this project incorporates **agent movement time** and **collision 
 ###  LLM-Based Pipeline
 
 This project is structured to accept **natural language job descriptions as input** and produce **natural language responses as output**, enabling seamless interaction between human-readable tasks and scheduling solutions.
+<p align="center">
+<img src="https://github.com/user-attachments/assets/0179de7b-1125-4d66-9dc1-9ac088d653f0" width="800" height="430"/>
+</p>
 
 <br/>
 
@@ -125,7 +128,7 @@ LLM2 is responsible for transforming the optimized job schedule, which is repres
 
 ###  4. Simulation 
 #### Baseline Policy : Lifelong Multi-Agent Pathfinding Policy
-#### License
+#### i. License
 This project is licensed under the MIT License.  
 Some portions of the code are adapted from [AIRI-Institute/learn-to-follow](https://github.com/AIRI-Institute/learn-to-follow) under the same license.  
 See the [LICENSE](.learn_follow/LICENSE) file for details.
@@ -134,7 +137,7 @@ See the [LICENSE](.learn_follow/LICENSE) file for details.
   <img src="sim/docker/image.png" alt="Lifelong MAPF Example" width="300"/>
 </p>
 
-#### Policy Description
+#### ii. Policy Description
 
 The core policy implemented in this project is based on the **Follower** algorithm proposed in  
 ["Learn to Follow: Decentralized Lifelong Multi-agent Pathfinding via Planning and Learning"](https://arxiv.org/pdf/2310.01207).
@@ -172,19 +175,8 @@ The simulation records both the planned job sequences and the actual agent traje
 **Motivation for Path-aware Scheduling** 
 Discrepancies between scheduled and actual task completions observed in the simulation motivate further research into scheduling approaches that jointly consider movement, congestion, and task timing. This simulation serves as a baseline for such future work.
 
-#### Summary:
+#### iii. Summary:
 This project provides a simulation framework for analyzing the interplay between job scheduling and multi-agent pathfinding, highlighting the challenges of schedule fidelity in dynamic, congested environments.
-
----
-
-### Installation:
-
-#### 1. Create and activate the Conda environment (Python 3.8)
-conda create -n mlp_jssp_project python=3.8
-conda activate mlp_jssp_project
-
-##### 2. Install required Python packages
-pip install -r docker/requirements.txt
 
 ---
 
@@ -228,6 +220,25 @@ parser.add_argument('--map_name', type=str, default='mlp_test', help='Map name (
 
 - agents_start_pos: The starting positions for each agent.
 
+---
+
+## Installation:
+
+### 1. Create and activate the Conda environment (Python 3.8)
+```
+conda create -n mlp_jssp_project python=3.8
+conda activate mlp_jssp_project
+```
+### 2. Install required Python packages
+```
+pip install ortools
+pip install -r docker/requirements.txt
+```
+### 3. Run `main.py` for solutions and 
+```
+main.py
+
+```
 ---
 
 ##  Results 
