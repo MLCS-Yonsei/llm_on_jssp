@@ -1,16 +1,10 @@
-###### llm2를 위한 데이터 생성 코드 ######
-
-###### llm2를 위한 데이터 생성 코드 ######
-
 import random
 import json
 
-path = './medical/jssp_llm/train_llm/'
+path = #"File path of 'llm_on_jssp'/" 
 
 def generate_random_schedule(num_jobs, num_machines, min_ops=2, max_ops=4, min_dur=1, max_dur=10):
-    """
-    랜덤하게 schedule 리스트와 makespan 생성
-    """
+    
     schedule = []
     max_end_time = 0
     for _ in range(num_jobs):
@@ -37,12 +31,12 @@ def schedule_to_natural_language_en(data):
         out.append(f"Job {j} is processed on " + ", ".join(steps) + ".")
     return " ".join(out)
 
-# 생성 파라미터
-NUM_SAMPLES = 1000   # 샘플 개수 (원하는 만큼 수정)
-NUM_JOBS = (2, 6)    # 최소~최대 job 개수
-NUM_MACHINES = (2, 6) # 최소~최대 machine 개수
 
-with open(path + 'test_data_llm2_100.jsonl', 'w', encoding='utf-8') as f:
+NUM_SAMPLES = 1000       # number of samples
+NUM_JOBS = (2, 6)        # min~max of job_#
+NUM_MACHINES = (2, 6)    # min~max of machine_#
+
+with open(path + 'data_llm2_1k.jsonl', 'w', encoding='utf-8') as f:
     for _ in range(NUM_SAMPLES):
         nj = random.randint(*NUM_JOBS)
         nm = random.randint(*NUM_MACHINES)
