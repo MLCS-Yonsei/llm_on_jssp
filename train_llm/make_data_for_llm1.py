@@ -1,11 +1,13 @@
-## 프롬프트 생성 조합은 4개씩만 남기고 최대한 종류끼리는 안겹치게, 같은 종류 내에서는 비슷하게 ##
-# 샘플간 job, machine, operation, duration 랜덤 #
-# 하나의 샘플 내에서 operation 개수 랜덤 (고정X)
-# 하나의 job 내에서 machine 중복 허용X (1번 썼다가 2번 쓴 후에 다시 1번 쓰는 경우 제외)
-# 평가기준(fastest, best_makespan) 랜덤
+# Limit to 4 prompt combinations per type, minimizing inter-type overlap 
+# Randomized: job/machine/operation/duration per sample
+# Variable operation count per sample
+# No repeated machine within a single job
+# Randomly choose evaluation criteria: fastest or best_makespan
 
 import random
 import json
+
+path = #"File path of 'llm_on_jssp'/" 
 
 machine_expr = [
     "M{idx}",
@@ -101,10 +103,10 @@ def generate_dataset(n_samples=200,
             row = [[m, d] for m, d in zip(machines, durs)]
             matrix.append(row)
 
-        # 평가 기준
+        # evaluation label
         criteria, criteria_prompt = random.choice(criteria_expr)
 
-        # 🔵 instruction, input, output 구조화!
+        # instruction, input, output structure
         instruction = (
             "Convert the following job description into a matrix. "
             "Each row is a job. Each tuple is (machine_index, duration). "
@@ -129,12 +131,10 @@ def generate_dataset(n_samples=200,
         all_samples.append(sample)
     return all_samples
 
-# 생성 예시
+# inference example
 samples = generate_dataset(n_samples=100)
 
-path = "C:/Users/djm06/Desktop/MLP/team_project/"
-#path = "./medical/jssp_llm/"
-with open(path + "train_llm/dataset_llm1_100_new_new.jsonl", "w", encoding="utf-8") as f:
+with open(path + "train_llm/dataset_llm1_5k.jsonl", "w", encoding="utf-8") as f:
     for ex in samples:
         f.write(json.dumps(ex) + "\n")
 
@@ -142,29 +142,3 @@ print(f"Sample example:\n{samples[0]}")
 print("dataset_llm1_5k.jsonl file created.")
 
 
-
-
-
-
-'''
-필요없어서 지금은 matrix만 출력
-{"processing_times": [
-    [4, 2, 9, 6, 6],    // Job 1의 각 작업(oper.) 소요 시간
-    [5, 6, 6, 9, 8],    // Job 2의 각 작업 소요 시간
-    [1, 3, 9, 5, 3]     // Job 3의 각 작업 소요 시간
-    [7, 3, 9, 5, 3]     // Job 4의 각 작업 소요 시간
- ],
- "machine_ids": [
-    [4, 0, 0, 3, 1],    // Job 1의 각 작업이 배정된 machine 번호 (0부터 시작)
-    [4, 1, 0, 4, 4],    // Job 2의 각 작업이 배정된 machine 번호
-    [1, 2, 4, 3, 2],    // Job 3의 각 작업이 배정된 machine 번호
-    [1, 2, 4, 3, 2]     // Job 4의 각 작업이 배정된 machine 번호
- ], 
- "matrix": [
-    [[4, 4], [0, 2], [0, 9], [3, 6], [1, 6]],   // Job 1의 각 작업 (machine_index, duration)
-    [[4, 5], [1, 6], [0, 6], [4, 9], [4, 8]],   // Job 2의 각 작업
-    [[1, 7], [2, 3], [4, 9], [3, 5], [2, 3]]    // Job 3의 각 작업
- ],
- "label": 0
-}
-'''
