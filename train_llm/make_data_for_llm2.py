@@ -36,7 +36,7 @@ NUM_SAMPLES = 1000       # number of samples
 NUM_JOBS = (2, 6)        # min~max of job_#
 NUM_MACHINES = (2, 6)    # min~max of machine_#
 
-with open(path + 'data_llm2_1k.jsonl', 'w', encoding='utf-8') as f:
+with open(path + 'dataset_llm2_1k.jsonl', 'w', encoding='utf-8') as f:
     for _ in range(NUM_SAMPLES):
         nj = random.randint(*NUM_JOBS)
         nm = random.randint(*NUM_MACHINES)
