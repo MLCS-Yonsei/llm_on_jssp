@@ -136,11 +136,11 @@ This project provides a simulation framework for analyzing the interplay between
 ### Installation:
 
 #### 1. Create and activate the Conda environment (Python 3.8)
-conda create -n mlp_jssp_project python=3.8
-conda activate mlp_jssp_project
+- conda create -n mlp_jssp_project python=3.8
+- conda activate mlp_jssp_project
 
 ##### 2. Install required Python packages
-pip install -r docker/requirements.txt
+- pip install -r docker/requirements.txt
 
 ---
 
