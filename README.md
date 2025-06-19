@@ -224,27 +224,32 @@ parser.add_argument('--map_name', type=str, default='mlp_test', help='Map name (
 
 ## Installation:
 
-### 1. Create and activate the Conda environment (Python 3.8)
+#### 1. Create and activate the Conda environment (Python 3.8)
 ```
 conda create -n mlp_jssp_project python=3.8
 conda activate mlp_jssp_project
 ```
-### 2. Install required Python packages
+#### 2. Install required Python packages
 ```
 pip install ortools
-pip install -r docker/requirements.txt
+pip install -r sim/docker/requirements.txt
 ```
-### 3. Run `main.py` for solutions and 
+#### 3. Run `main.py` for solutions and `sim/test.py` for simulator
 ```
 main.py
-
+sim/test.py
 ```
 ---
 
 ##  Results 
 
 ### 1. LLM Conversion Accuracy
-
+We went through a brief benchmark comparing conversion performance between the LLM fine-tuned with our dataset, original Mistral model before fine-tuned and a simple sequence-to-sequence model.
+Each model was evaluated by a test dataset with 50 samples. <br/>
+**EM Acc** shows how many samples each model exactly matched the ground truth, **Format Fail** shows how many samples had failed to get the correct format, and **Avg Inference Time** represents how long it took to generate samples. <br/>
+Due to the nature of the task, even minor errors in the output render it unusable, so partial credit metrics were not employed.
+<br/>
+#### i. LLM1 Results
 | Model             | EM Acc | Format Fail | Avg Inference Time |
 |------------------|--------|-------------|--------------------|
 | Fine-tuned LLM   | 36.00% | 32 / 50     | 7.597 s            |
@@ -266,4 +271,13 @@ Job Matrix:
 <p align="center">
   <img src="sim/renders/mlp_test.svg" alt="Lifelong MAPF Example" width="300"/>
 </p>
+
+---
+
+## Discussions
+
+
+
+---
+## Contribution of each team member
 
