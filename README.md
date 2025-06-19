@@ -185,7 +185,6 @@ parser.add_argument('--map_name', type=str, default='mlp_test', help='Map name (
 - agents_start_pos: The starting positions for each agent.
 
 ---
----
 
 ##  Results
 
