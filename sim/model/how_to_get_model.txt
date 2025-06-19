@@ -5,15 +5,18 @@ https://drive.google.com/drive/folders/1YbxZTfvks-jhTYgtnueLuSaYLvrEdjq4?usp=dri
 After downloading, place the files with the following directory structure:
 
 .
-├── learn_follow
-├── model
-│   ├── follower
-│   │   ├── checkpoint_p0
+├── learn_follow/
+├── model/
+│   ├── follower/
+│   │   ├── checkpoint_p0/
 │   │   │   └── checkpoint_000061056_1000341504.pth
 │   │   └── config.json
-│   └── follower-lite
-│       ├── checkpoint_p0
+│   └── follower-lite/
+│       ├── checkpoint_p0/
 │       │   └── checkpoint_000001248_20447232.pth
 │       ├── config.json
 │       └── follower-lite.onnx
-└── pogema
+└── pogema/
+
+
+
