@@ -207,12 +207,8 @@ sim/test.py
 ### Map, Goal Sequences, and Wait Sequences
 
 #### 4. Where to contain input data
-Job description prompts and map image is stored at `input/env_img.png`
-
-
-- The map configuration file is stored at:  
-  `env/test-mapz.yaml`
-- You can specify the map file by editing the parser argument in your code:
+Job description prompts and map image is stored at `input/problem_prompt.json` and `input/env_img.png`.
+The map configuration file for the simulator is stored at `env/test-mapz.yaml` and you can specify the map file by editing the parser argument in your code:
 
 ```python
 parser.add_argument('--map_name', type=str, default='mlp_test', help='Map name (default: %(default)s)')
