@@ -161,6 +161,7 @@ parser.add_argument('--map_name', type=str, default="your env", help='Map name (
 - Edit these variables in test.py, specifically in the create_custom_env function:
 
 ```python
+   # test example
     goal_sequences = [
         [(0, 13), (0, 7), (0, 18), (10, 12), (0, 24)],
         [(0, 24), (0, 13), (10, 0)],
