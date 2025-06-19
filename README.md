@@ -80,7 +80,7 @@ Example prompt:
   - Collision avoidance
   - Decentralized policy using **Learn to Follow**
 
-### Lifelong Multi-Agent Pathfinding Policy
+#### Baseline Policy : Lifelong Multi-Agent Pathfinding Policy
 #### License
 This project is licensed under the MIT License.  
 Some portions of the code are adapted from [AIRI-Institute/learn-to-follow](https://github.com/AIRI-Institute/learn-to-follow) under the same license.  
