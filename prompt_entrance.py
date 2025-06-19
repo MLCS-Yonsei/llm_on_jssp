@@ -1,5 +1,3 @@
-##### 학습 완료된 llm들이 일하는 방 #####
-
 import json
 import cv2
 import numpy as np
@@ -7,7 +5,7 @@ from collections import deque
 import itertools
 from llm_module import llm_parse_input, llm_generate_final_output
 
-path = 'C:/Users/djm06/Desktop/MLP/team_project/'
+path = #"File path of 'llm_on_jssp'/" 
 
 def parse_grid_and_colors(png_path, grid_shape=(13, 27)):
     img = cv2.imread(png_path)
@@ -19,13 +17,13 @@ def parse_grid_and_colors(png_path, grid_shape=(13, 27)):
     grid = np.zeros((rows, cols), dtype=np.uint8)
     color_pos = {}
     color_labels = {
-        "red":    ([200,   0,   0], [255,  60,  60]),         # R만 높고 G/B는 낮은 값
-        "blue":   ([  0, 140, 200], [ 80, 220, 255]),         # G 140~220, B 200~255, R 낮음
-        "yellow": ([200, 200,   0], [255, 255, 100]),         # R/G 모두 높고 B 낮음
-        "green":  ([  0, 120,  40], [ 80, 220, 120]),         # G 크고 R/B는 중~낮
-        "purple": ([ 90,  30, 120], [150,  80, 200]),         # R 90~150, G 30~80, B 120~200
-        "pink":   ([200,   0, 200], [255, 120, 255]),         # R/B 높고 G 낮음
-        "gray":   ([100, 100, 100], [200, 200, 200]),         # 중간 회색톤
+        "red":    ([200,   0,   0], [255,  60,  60]),         
+        "blue":   ([  0, 140, 200], [ 80, 220, 255]),         
+        "yellow": ([200, 200,   0], [255, 255, 100]),        
+        "green":  ([  0, 120,  40], [ 80, 220, 120]),         
+        "purple": ([ 90,  30, 120], [150,  80, 200]),       
+        "pink":   ([200,   0, 200], [255, 120, 255]),       
+        "gray":   ([100, 100, 100], [200, 200, 200]),       
     }
 
 
@@ -34,7 +32,7 @@ def parse_grid_and_colors(png_path, grid_shape=(13, 27)):
             cx = int(col * cell_w + cell_w // 2)
             cy = int(row * cell_h + cell_h // 2)
             rgb = img_rgb[cy, cx]
-            #print(f"row={row}, col={col}, center RGB={rgb}") # 좌표마다 인식된 색
+            #print(f"row={row}, col={col}, center RGB={rgb}") 
             if np.all(rgb < 50):
                 grid[row, col] = 1
             else:
@@ -62,11 +60,11 @@ def bfs_shortest_path(grid, start):
 def color_distances_from_png(png_path, grid_shape=(13,27)):
     grid, color_pos = parse_grid_and_colors(png_path, grid_shape)
     color_order = ['red', 'green', 'blue', 'yellow', 'purple', 'pink', 'gray']
-    # 반드시 지정된 색상만 사용
+    
     result = {}
     for i, c1 in enumerate(color_order):
         for j, c2 in enumerate(color_order):
-            if i < j:  # 조합 한 번씩만
+            if i < j:  
                 if c1 in color_pos and c2 in color_pos:
                     visited = bfs_shortest_path(grid, color_pos[c1])
                     dist = visited[color_pos[c2]]
@@ -122,11 +120,9 @@ def make_input_matrix(prompt_path, image_path, al_path):
         f"Evaluation criterion: {eval_crit}\n\n"
         f"Job descriptions:\n{job_descs}\nOutput:"
     )
-    # llm1의 행렬 받기 
-    # 출력 예시
-    #{'matrix': [[[2, 2], [0, 3]], [[1, 4]]], 'label': 'best_makespan'}
-    problem_json = {'matrix': [[[2, 10], [0, 5], [3,20], [5, 2], [1, 12]], [[1, 15],[2,7], [6, 20]], [[6, 10], [2, 15], [5, 20]], [[0, 20],[4, 5], [1, 2], [3, 10]]], 'label': 'best_makespan'}
-    #problem_json = llm_parse_input(full_prompt, al_path)
+    
+    
+    problem_json = llm_parse_input(full_prompt, al_path)
     print("\n=== LLM OUTPUT ===\n", problem_json)
 
     distances = color_distances_from_png(image_path)
@@ -135,7 +131,7 @@ def make_input_matrix(prompt_path, image_path, al_path):
         print(f"{a} <-> {b}: {d}")
 
     result = add_move_operations(problem_json, distances)
-    print("\n=== 최종 결과 ===\n", result)
+    print("\n=== Final results ===\n", result)
 
     return result
 
