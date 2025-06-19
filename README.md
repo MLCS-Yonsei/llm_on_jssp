@@ -149,11 +149,11 @@ This project provides a simulation framework for analyzing the interplay between
 #### Map
 
 - The map configuration file is stored at:  
-  `env/test-mapz.yaml`
+  `env/test-mapz.yaml/"your env"`
 - You can specify the map file by editing the parser argument in your code:
 
 ```python
-parser.add_argument('--map_name', type=str, default='mlp_test', help='Map name (default: %(default)s)')
+parser.add_argument('--map_name', type=str, default="your env", help='Map name (default: %(default)s)')
 ```
 
 #### Goal Sequences & Wait Sequences
