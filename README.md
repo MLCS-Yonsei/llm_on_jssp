@@ -44,6 +44,7 @@ This project is structured to accept **natural language job descriptions as inpu
 
 To achieve this, two Large Language Models (LLMs) are utilized:
 
+---
 ### 1. LLM1 (From Language to Matrix)
 
 - **Purpose**: Converts natural language prompts into structured job matrices
@@ -57,9 +58,12 @@ To achieve this, two Large Language Models (LLMs) are utilized:
     - Number of jobs and operations
     - Machine assignments
     - Processing durations
-   
+
+---
 ### 2. Integrated Optimizer
 
+
+---
 ### 3. LLM2 (From Matrix to Language)
 
 - **Purpose**: Converts the matrix-form solution (from solver output) back into natural language
@@ -71,8 +75,8 @@ To achieve this, two Large Language Models (LLMs) are utilized:
 
 ---
 
-##  4. Simulation (Lifelong Multi-Agent Pathfinding Policy)
-## License
+###  4. Simulation (Lifelong Multi-Agent Pathfinding Policy)
+#### License
 This project is licensed under the MIT License.  
 Some portions of the code are adapted from [AIRI-Institute/learn-to-follow](https://github.com/AIRI-Institute/learn-to-follow) under the same license.  
 See the [LICENSE](.learn_follow/LICENSE) file for details.
