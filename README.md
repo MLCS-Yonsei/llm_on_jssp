@@ -80,8 +80,8 @@ Example prompt:
   - Collision avoidance
   - Decentralized policy using **Learn to Follow**
 
-# Lifelong Multi-Agent Pathfinding Policy
-## License
+### Lifelong Multi-Agent Pathfinding Policy
+#### License
 This project is licensed under the MIT License.  
 Some portions of the code are adapted from [AIRI-Institute/learn-to-follow](https://github.com/AIRI-Institute/learn-to-follow) under the same license.  
 See the [LICENSE](.learn_follow/LICENSE) file for details.
@@ -90,7 +90,7 @@ See the [LICENSE](.learn_follow/LICENSE) file for details.
   <img src=".sim/docker/image.png" alt="Lifelong MAPF Example" width="300"/>
 </p>
 
-## Policy Description
+#### Policy Description
 
 The core policy implemented in this project is based on the **Follower** algorithm proposed in  
 ["Learn to Follow: Decentralized Lifelong Multi-agent Pathfinding via Planning and Learning"](https://arxiv.org/pdf/2310.01207).
@@ -128,25 +128,25 @@ The simulation records both the planned job sequences and the actual agent traje
 **Motivation for Path-aware Scheduling** 
 Discrepancies between scheduled and actual task completions observed in the simulation motivate further research into scheduling approaches that jointly consider movement, congestion, and task timing. This simulation serves as a baseline for such future work.
 
-## Summary:
+#### Summary:
 This project provides a simulation framework for analyzing the interplay between job scheduling and multi-agent pathfinding, highlighting the challenges of schedule fidelity in dynamic, congested environments.
 
 ---
 
-## Installation:
+### Installation:
 
-# 1. Create and activate the Conda environment (Python 3.8)
+#### 1. Create and activate the Conda environment (Python 3.8)
 conda create -n mlp_jssp_project python=3.8
 conda activate mlp_jssp_project
 
-# 2. Install required Python packages
+##### 2. Install required Python packages
 pip install -r docker/requirements.txt
 
 ---
 
-## Map, Goal Sequences, and Wait Sequences
+### Map, Goal Sequences, and Wait Sequences
 
-### Map
+#### Map
 
 - The map configuration file is stored at:  
   `env/test-mapz.yaml`
@@ -156,7 +156,7 @@ pip install -r docker/requirements.txt
 parser.add_argument('--map_name', type=str, default='mlp_test', help='Map name (default: %(default)s)')
 ```
 
-### Goal Sequences & Wait Sequences
+#### Goal Sequences & Wait Sequences
 
 - Edit these variables in test.py, specifically in the create_custom_env function:
 
