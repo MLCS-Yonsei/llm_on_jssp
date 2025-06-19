@@ -1,16 +1,15 @@
-###### train LLM1 ######
-## 얘 하는 일 :             ####
 from datasets import load_dataset
 from transformers import AutoTokenizer, AutoModelForCausalLM, TrainingArguments, Trainer, BitsAndBytesConfig, pipeline
 from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
 import wandb
 
+path = #"File path of 'llm_on_jssp'/" 
+
 model_name = "mistralai/Mistral-7B-Instruct-v0.2"
-path = './medical/jssp_llm/'
-dataset_path = path + "train_llm/dataset_llm1_5k_new_new.jsonl" 
+dataset_path = path + "train_llm/dataset_llm1_5k.jsonl" 
 wandb.init(project="jssp-llm", name="jssp_llm_ft")
-'''
-# 1. 데이터셋 로딩 및 프롬프트 구성
+
+
 dataset = load_dataset("json", data_files=dataset_path, split="train")
 
 def formatting_func(example):
@@ -98,21 +97,22 @@ trainer = Trainer(
 )
 
 trainer.train()
-# test set에서 평가
 eval_results = trainer.evaluate()
 print("=== Evaluation Results on Test Data ===")
 print(eval_results)
 trainer.save_model(path+"llm1_jssp_mistral7b_lora_final")
 print("Fine-tuning complete and model saved!")
-'''
-# 2. Prediction 예시 (inference)
+
+
+''' Prediction Example
+# Prediction (inference)
 from transformers import pipeline, AutoModelForCausalLM, AutoTokenizer
 
 finetuned_model_path = path + "llm1_jssp_mistral7b_lora_final"
 tokenizer = AutoTokenizer.from_pretrained(finetuned_model_path)
 model = AutoModelForCausalLM.from_pretrained(finetuned_model_path, device_map="auto", trust_remote_code=True)
 
-# 🔵 파이프라인: 디코딩 컨트롤 세팅!
+
 pipe = pipeline(
     "text-generation",
     model=model,
@@ -124,7 +124,7 @@ pipe = pipeline(
     eos_token_id=tokenizer.eos_token_id,
 )
 
-# 프롬프트 예시 (실제와 동일하게!)
+# Prompt example
 instruction = (
     "Convert the following job description into a matrix. Each row is a job. Each tuple is (machine_index, duration). "
     "Also, return the correct label based on the evaluation criterion. Output must be in JSON format with keys 'matrix' and 'label'."
@@ -139,15 +139,15 @@ full_prompt = f"{instruction}\n{input_text}\nOutput:"
 
 result = pipe(full_prompt)[0]['generated_text']
 
-print("\n=== 예시 입력 ===")
+print("\n=== input prompt ===")
 print(full_prompt)
 print("\n=== LLM Prediction ===")
 print(result)
 
-# JSON 파싱
+
 import json
 try:
-    # 마지막 } 기준으로 자름
+    
     start_idx = result.find('{')
     end_idx = result.rfind('}')
     if start_idx != -1 and end_idx != -1:
@@ -156,6 +156,7 @@ try:
         print("\n=== Parsed Output ===")
         print(parsed)
     else:
-        print("\n[Warning] JSON 중괄호 블록을 찾지 못함.")
+        print("\n[Warning] Can't find JSON {} block.")
 except Exception as e:
-    print("\n[Warning] output 파싱 실패!", e)
+    print("\n[Warning] output parsing failed", e)
+'''
