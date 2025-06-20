@@ -271,10 +271,22 @@ We went through a brief benchmark comparing conversion performance between the L
 Each model was evaluated by a test dataset with 50 samples. <br/>
 **"EM Acc"** shows how many samples each model exactly matched the ground truth, **"Format Fail"** shows how many samples had failed to get the correct format, and **"Avg Inference Time"** represents how long it took to generate samples. <br/>
 Due to the nature of the task, even minor errors in the output render it unusable, so partial credit metrics were not employed.
+
+
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/326f649c-67bb-4295-82cd-5eb8b97e77a3" width="400"/>
+  <img src="https://github.com/user-attachments/assets/f350e299-3580-4b1e-8643-01ce4d04c86c" width="400"/>
+</p>
+
+<div align="center">
+  Fig. Train loss of LLM1 (left) and LLM2 (right)
+</div>
+
 <br/>
 
 #### i. Performance of LLM1 (convert human language to matrix)
-**"Matrix Only"** and **"Label Only"** represents the percentage of matrix or label answers with the correct format 
+> **"Matrix Only"** and **"Label Only"** represents the percentage of matrix or label answers with the correct format 
 <p align="center">
 <img src="https://github.com/user-attachments/assets/32c9bc40-a108-4120-bcc4-dea76a4256de" width="800" height="100"/>
 </p>
@@ -335,6 +347,7 @@ Beyond LLMs, reinforcement learning (RL)-based self-adaptive schedulers can be i
 - **Multi-Agent Collaboration & Competition Scenarios**<br/>
 The framework can be extended to sophisticated multi-agent scenarios involving collaboration, competition, and varying degrees of autonomy. In large-scale production lines, logistics centers, or heterogeneous robot environments, the system can manage dynamic role assignments, cooperative/competitive decision-making, and other complex agent interactions.
 
+<br/>
 
 ---
 ## Contribution of each team member
