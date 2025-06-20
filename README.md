@@ -238,8 +238,28 @@ wait_sequences = [
 agents_start_pos = [(7, 0), (7, 1), (7, 2), (7, 3)]
 ```
 
+#### 6. How to get models
+Unable to upload models due to file size limitations.  
+Please download the `model_mlp_team5` folder from the following [Google Drive link](https://drive.google.com/file/d/1oSI_-A-LIs90YbZl7suQRodyRI3RJWTU/view?usp=sharing) <br/>
+The folder must contain 5 folders: <br/>
+**>> llm1_jssp_mistral7b_lora_final , llm1_jssp_mistral7b_lora , mistral7b-lora-struct2text , llm2_mistral7b-lora-struct2text , model**
 
-  
+After downloading, place the folders with the following directory structure:
+```
+.
+├── input/
+├── train_llm/
+├── llm1_jssp_mistral7b_lora_final/
+├── llm1_jssp_mistral7b_lora/
+├── mistral7b-lora-struct2text/
+├── llm2_mistral7b-lora-struct2text/
+└── sim/
+    :
+    ├── learn_follow/
+    ├── model/
+    ├── pogema/
+    :
+```
 <br/>
 
 ---
