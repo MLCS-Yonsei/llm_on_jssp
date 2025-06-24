@@ -5,7 +5,6 @@ from collections import deque
 import itertools
 from llm_module import llm_parse_input, llm_generate_final_output
 
-#path = "C:/Users/kim/Desktop/mlp/llm_on_jssp_github/" 
 
 def parse_grid_and_colors(png_path, grid_shape=(13, 27)):
     img = cv2.imread(png_path)
@@ -69,6 +68,7 @@ def color_distances_from_png(png_path, grid_shape=(13,27)):
                     visited = bfs_shortest_path(grid, color_pos[c1])
                     dist = visited[color_pos[c2]]
                     result[(c1, c2)] = int(dist)
+                    
     '''check if all colors are detected
     print("\n=== Detected color positions ===")
     for c, pos in color_pos.items():
@@ -138,26 +138,3 @@ def make_input_matrix(prompt_path, image_path, al_path):
 
     return result
 
-
-# 사용 예시:
-#make_input_matrix(path + "input/problem_prompt.json", path + "input/img3.png", path)
-# 입력 예시
-# problem_json = {'matrix': [[[2, 2], [0, 3], [3,4]], [[1, 4],[2,2]]], 'label': 'best_makespan'}
-# 변형된 json, 최종 출력
-# {'matrix': [[[2, 2], [901, 26], [0, 3], [902, 31], [3, 4]], [[1, 4], [911, 25], [2, 2]]], 'label': 'best_makespan'}
-
-'''
-# 확장된 문제
-입력
-problem_json = {'matrix': [[[2, 10], [0, 5], [3,20], [5, 2], [1, 12]], 
-[[1, 15],[2,7], [6, 20]], 
-[[6, 10], [2, 15], [5, 20]], 
-[[0, 20],[4, 5], [1, 2], [3, 10]]], 
-'label': 'best_makespan'}
-출력
- {'matrix': [[[2, 10], [901, 20], [0, 5], [902, 25], [3, 20], [903, 0], [5, 2], [904, 0], [1, 12]], 
- [[1, 15], [911, 25], [2, 7], [912, 23], [6, 20]], 
- [[6, 10], [921, 23], [2, 15], [922, 0], [5, 20]], 
- [[0, 20], [931, 33], [4, 5], [932, 10], [1, 2], [933, 18], [3, 10]]], 
- 'label': 'best_makespan'}
-'''
