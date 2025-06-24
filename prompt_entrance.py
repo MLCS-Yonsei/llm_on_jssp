@@ -5,7 +5,7 @@ from collections import deque
 import itertools
 from llm_module import llm_parse_input, llm_generate_final_output
 
-path = #"File path of 'llm_on_jssp'/" 
+#path = "C:/Users/kim/Desktop/mlp/llm_on_jssp_github/" 
 
 def parse_grid_and_colors(png_path, grid_shape=(13, 27)):
     img = cv2.imread(png_path)
@@ -69,6 +69,7 @@ def color_distances_from_png(png_path, grid_shape=(13,27)):
                     visited = bfs_shortest_path(grid, color_pos[c1])
                     dist = visited[color_pos[c2]]
                     result[(c1, c2)] = int(dist)
+    '''check if all colors are detected
     print("\n=== Detected color positions ===")
     for c, pos in color_pos.items():
         print(f"{c}: {pos}")
@@ -77,6 +78,7 @@ def color_distances_from_png(png_path, grid_shape=(13,27)):
         print(f"{a} <-> {b}: {d}")
     if not result:
         print("No color pairs found! (Check grid or color detection.)")
+    '''
     return result
 
 def add_move_operations(problem_json, distances):
@@ -122,22 +124,23 @@ def make_input_matrix(prompt_path, image_path, al_path):
     )
     
     
-    problem_json = llm_parse_input(full_prompt, al_path)
-    print("\n=== LLM OUTPUT ===\n", problem_json)
-
+    problem_json = llm_parse_input(full_prompt)
     distances = color_distances_from_png(image_path)
+    result = add_move_operations(problem_json, distances)
+
+    ''' print results for debugging
+    print("\n=== LLM OUTPUT ===\n", problem_json)    
     print("\n=== Color Distances ===")
     for (a, b), d in distances.items():
         print(f"{a} <-> {b}: {d}")
-
-    result = add_move_operations(problem_json, distances)
     print("\n=== Final results ===\n", result)
+    '''
 
     return result
 
 
 # 사용 예시:
-make_input_matrix(path + "input/problem_prompt.json", path + "input/img3.png", path)
+#make_input_matrix(path + "input/problem_prompt.json", path + "input/img3.png", path)
 # 입력 예시
 # problem_json = {'matrix': [[[2, 2], [0, 3], [3,4]], [[1, 4],[2,2]]], 'label': 'best_makespan'}
 # 변형된 json, 최종 출력
