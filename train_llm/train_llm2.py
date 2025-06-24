@@ -1,10 +1,8 @@
 from transformers import logging
 logging.set_verbosity_error()
 
-
 import transformers.modeling_utils as _mutils
 _mutils.ALL_PARALLEL_STYLES = []
-
 
 from transformers.modeling_utils import PreTrainedModel
 PreTrainedModel.post_init = lambda self: None
@@ -117,17 +115,3 @@ trainer.train()
 model.save_pretrained(path + "llm2_mistral7b-lora-struct2text")
 tokenizer.save_pretrained(path + "llm2_mistral7b-lora-struct2text")
 
-'''Prediction
-from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
-
-model_path = path + "llm2_mistral7b-lora-struct2text"
-model = AutoModelForCausalLM.from_pretrained(model_path, torch_dtype=torch.bfloat16, device_map="auto")
-tokenizer = AutoTokenizer.from_pretrained(model_path)
-
-#prompt = 'Convert the following job schedule into natural language:\n{"solution": {"schedule": [[(0, 0, 2), (1, 2, 5), (2, 5, 6)]], "makespan": 6}}\nAnswer:'
-#prompt = 'Convert the following job schedule into natural language:\n{"solution": {"schedule": [[(2, 0, 2), (0, 28, 31), (3, 62, 66)], [(1, 0, 4), (2, 29, 31)]], "makespan": 66}}\nAnswer:'
-
-inputs = tokenizer(prompt, return_tensors="pt").to("cuda")
-outputs = model.generate(**inputs, max_new_tokens=128)
-print(tokenizer.decode(outputs[0], skip_special_tokens=True))
-'''
