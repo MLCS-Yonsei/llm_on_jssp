@@ -40,7 +40,7 @@ def solve_schedule(problem_json):
             for future in futures:
                 solver_name, solution = future.result()
                 results.append((solver_name, solution))
-        print(results) ### 모든 답 출력력
+        
         # Select the solution with the shortest makespan
         best_solver, best_solution = min(results, key=lambda x: x[1]["makespan"])
         return {
