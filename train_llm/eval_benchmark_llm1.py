@@ -30,8 +30,9 @@ from transformers import (
     AutoModelForSeq2SeqLM,
     pipeline,
 )
+import config
 
-path = #"File path of 'llm_on_jssp'/" 
+path = config.to_project_path
 
 def load_llm_model(local_path):
     device_map = {"": 0} if torch.cuda.is_available() else None
@@ -171,14 +172,14 @@ def benchmark(models, test_samples):
 
 if __name__ == "__main__":
     finetuned_llm = load_llm_model(
-        path + "llm1_jssp_mistral7b_lora_final"
+        path + "/llm1_jssp_mistral7b_lora_final"
     )
     mistral_original = load_llm_model("mistralai/Mistral-7B-Instruct-v0.2")
     seq2seq = load_seq2seq_model("t5-base")
 
     
     with open(
-        path + "train_llm/test_data_llm1_100.jsonl"
+        path + "/train_llm/test_data_llm1_100.jsonl"
     ) as f:
         test_samples = [json.loads(line) for line in f][:50]    # evaluate only 50 samples
 
