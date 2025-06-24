@@ -187,25 +187,26 @@ Discrepancies between scheduled and actual task completions observed in the simu
 
 
 ## Installation:
+We need create different python environments for 'solutions' and 'simulator'
 
-#### 1. Create and activate the Conda environment (Python 3.8)
+#### 1-1. FOR SIMULATOR : Create environment, install packages, run the simulator
 ```
-conda create -n mlp_jssp_project python=3.8
-conda activate mlp_jssp_project
-```
-#### 2. Install required Python packages
-```
-pip install ortools
+conda create -n mlp_jssp_sim python=3.8
+conda activate mlp_jssp_sim
 pip install -r sim/docker/requirements.txt
-```
-#### 3. Run `main.py` for solutions and `sim/test.py` for simulator
-```
-main.py
 sim/test.py
 ```
-
-
-#### 4. Where to store input data
+#### 1-2. FOR SCHEDULE SOLUTIONS : Create environment, install packages, run the scheduler
+```
+conda create -n mlp_jssp_scheduler python=3.9
+conda activate mlp_jssp_scheduler
+pip install torch
+pip install git+https://github.com/huggingface/peft.git@main
+pip install ortools
+pip install opencv-python
+main.py
+```
+#### 2. Where to store input data
 Job description prompts and map image is stored at `input/problem_prompt.json` and `input/env_img.png`.
 For the simulator, the map configuration file is stored at `env/test-mapz.yaml` or you can specify the map file by editing the parser argument in your code:
 
@@ -213,7 +214,7 @@ For the simulator, the map configuration file is stored at `env/test-mapz.yaml` 
 parser.add_argument('--map_name', type=str, default='mlp_test', help='Map name (default: %(default)s)')
 ```
 
-#### 5. Setting goal sequences & wait sequences in simulator
+#### 3-1. Setting goal sequences & wait sequences in simulator
 
 Edit the goal sequences and wait sequences in our simulator specifically in the `create_custom_env()` function from `sim/test.py`. <br/>
 - **goal_sequences**   : The list of goals (targets) each agent will visit in order. <br/>
@@ -237,12 +238,24 @@ wait_sequences = [
 
 agents_start_pos = [(7, 0), (7, 1), (7, 2), (7, 3)]
 ```
+#### 3-2. Setting config information to user condition in scheduler
+Edit the directory path and hugging face token in `config.py`.
+To check your Hugging Face token click [HERE](https://huggingface.co/settings/tokens).
+```
+# only thing you have to modify #
 
-#### 6. How to get models
+to_project_path          = "path_to_project_folder"     
+which_prompt_do_you_want = "file_name_of_problem_prompt.json"             # no need to include path. only file name       
+which_env_do_you_want    = "file_name_of_env_img.png"                     # no need to include path. only file name
+HF_TOKEN                 = "your Hugging Face token with the access permission to mistralai/Mistral-7B-Instruct-v0.2"                  
+
+```
+
+#### 4. How to get trained models
 Unable to upload models due to file size limitations.  
 Please download the `model_mlp_team5` folder from the following [Google Drive link](https://drive.google.com/file/d/1oSI_-A-LIs90YbZl7suQRodyRI3RJWTU/view?usp=sharing) <br/>
 The folder must contain 5 folders: <br/>
-**>> llm1_jssp_mistral7b_lora_final , llm1_jssp_mistral7b_lora , mistral7b-lora-struct2text , llm2_mistral7b-lora-struct2text , model**
+**>> llm1_jssp_mistral7b_lora_final , llm2_mistral7b-lora-struct2text , model**
 
 After downloading, place the folders with the following directory structure:
 ```
@@ -250,8 +263,6 @@ After downloading, place the folders with the following directory structure:
 ├── input/
 ├── train_llm/
 ├── llm1_jssp_mistral7b_lora_final/
-├── llm1_jssp_mistral7b_lora/
-├── mistral7b-lora-struct2text/
 ├── llm2_mistral7b-lora-struct2text/
 └── sim/
     :
