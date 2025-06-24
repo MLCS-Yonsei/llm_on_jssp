@@ -1,6 +1,6 @@
 import os
 
-# only thing you have to modify #
+# only thing you need to modify #
 
 to_project_path          = "path_to_project_folder"     
 which_prompt_do_you_want = "file_name_of_problem_prompt.json"             # no need to include path. only file name       
