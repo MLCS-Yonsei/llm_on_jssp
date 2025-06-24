@@ -16,16 +16,13 @@ login(token=token)
 HfFolder.save_token(token)
 
 def _clean_peft_config(peft_path: str):
-    """
-    adapter_config.json 에 포함된 PEFT 최신 옵션(corda_config, loftq_config, eva_config, exclude_modules 등)
-    을 삭제해서, 하위 PEFT 버전에서도 로드될 수 있게 만듭니다.
-    """
+    
     config_file = os.path.join(peft_path, "adapter_config.json")
     if not os.path.isfile(config_file):
         return
     with open(config_file, "r", encoding="utf-8") as f:
         cfg = json.load(f)
-    # 제거할 키 목록 (계속 추가 가능)
+    
     bad_keys = (
         "corda_config",
         "loftq_config",
@@ -46,13 +43,13 @@ def _clean_peft_config(peft_path: str):
     with open(config_file, "w", encoding="utf-8") as f:
         json.dump(cfg, f, indent=2)
 
+
 def llm_parse_input(full_prompt: str):
     """
     Use LLM1 (LoRA adapter + base model) to parse input and extract JSON from the generated text.
     """
     base_model_id = config.LLM1_BASE_MODEL_ID
     lora_model_path = config.LLM1_LORA_MODEL_PATH
-
     _clean_peft_config(lora_model_path)
 
     # Ensure offload directory exists
@@ -89,10 +86,12 @@ def llm_parse_input(full_prompt: str):
     # Run inference
     result = pipe(full_prompt)[0]['generated_text']
 
+    '''For Debugging
     print("\n=== input prompt ===")
     print(full_prompt)
     print("\n=== LLM Prediction ===")
     print(result)
+    '''
 
     try:
         start_idx = result.find('{')
@@ -116,12 +115,10 @@ def llm_generate_final_output(prompt: str):
     """
     Use LLM2 (LoRA adapter + base model) to generate final structured text from prompt.
     """
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
     base_id = config.LLM2_BASE_MODEL_ID
     lora_path = config.LLM2_LORA_MODEL_PATH
     _clean_peft_config(lora_path)
-
-    # Select device for LLM2
-    device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
     # Load tokenizer
     tokenizer = AutoTokenizer.from_pretrained(base_id, use_auth_token=config.HF_TOKEN)
@@ -134,7 +131,7 @@ def llm_generate_final_output(prompt: str):
             bnb_config = BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_compute_dtype=torch.bfloat16)
             load_kwargs['quantization_config'] = bnb_config
         except Exception:
-            print('⚠ bitsandbytes not available, loading full precision on GPU')
+            print('bitsandbytes not available, loading full precision on GPU')
             load_kwargs['torch_dtype'] = torch.float16
     else:
         load_kwargs['torch_dtype'] = torch.float32
