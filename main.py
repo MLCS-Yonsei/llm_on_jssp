@@ -29,10 +29,7 @@ def extract_answer(llm_output):
 
 
 
-if __name__ == '__main__':
-    
-    #prompt = path + "/input/problem_prompt.json"             
-    #env_image = path + "/input/env_img.png"      
+if __name__ == '__main__':   
 
     path = config.to_project_path
     prompt = config.path_to_input_prompt
