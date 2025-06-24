@@ -253,7 +253,7 @@ HF_TOKEN                 = "your Hugging Face token with the access permission t
 
 #### 4. How to get trained models
 Unable to upload models due to file size limitations.  
-Please download the `model_mlp_team5` folder from the following [Google Drive link](https://drive.google.com/file/d/1oSI_-A-LIs90YbZl7suQRodyRI3RJWTU/view?usp=sharing) <br/>
+Please download the `model_mlp_team5` folder from the following [Google Drive link](https://drive.google.com/file/d/1b7WT1OgI_ctgezGKczuZKmmhotS3lc3m/view?usp=sharing) <br/>
 The folder must contain 5 folders: <br/>
 **>> llm1_jssp_mistral7b_lora_final , llm2_mistral7b-lora-struct2text , model**
 
